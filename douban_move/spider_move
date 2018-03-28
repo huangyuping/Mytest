@@ -1,0 +1,25 @@
+import requests
+import re
+from bs4 import BeautifulSoup
+
+
+move_url="https://movie.douban.com/subject/26787574/"
+
+response=requests.get(url=move_url)
+html = response.text
+print(html)
+soup = BeautifulSoup(html,'lxml')
+
+move_name = soup.find('span',attrs={'property':'v:itemreviewed'}).get_text()
+move_introduction = soup.find('span', attrs={'property': 'v:summary'}).get_text()
+move_director = soup.find(rel ="v:directedBy").get_text()
+move_starring_list = soup.find_all(attrs={'rel':'v:starring'})
+print(move_starring_list)
+a = []
+b = ''
+for i in move_starring_list:
+    a.append(i.get('href'))
+b =''.join(a)
+print(re.findall(r'celebrity/(.*?)/',b))
+
+
